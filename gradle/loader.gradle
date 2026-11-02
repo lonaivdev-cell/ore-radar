@@ -1,0 +1,74 @@
+// A loader module (forge, neoforge, fabric). It compiles the common module's sources, core's
+// included, into its own jar against its own Minecraft; common is also a compileOnly dependency so
+// IDEs resolve it. It also prepares the dev run directories. Apply after conventions.gradle.
+
+configurations {
+    commonJava {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    commonResources {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    compileOnly project(':common')
+    commonJava project(path: ':common', configuration: 'commonJava')
+    commonResources project(path: ':common', configuration: 'commonResources')
+}
+
+tasks.named('compileJava', JavaCompile) {
+    dependsOn configurations.commonJava
+    source configurations.commonJava
+}
+
+tasks.named('processResources', ProcessResources) {
+    dependsOn configurations.commonResources
+    from configurations.commonResources
+}
+
+// Run directories live outside the build tree, in runs/<build>-<module>/<run>, so a clean build
+// keeps the dev worlds.
+def runsDir = new File(rootDir.parentFile, "runs/${rootProject.name}-${project.name}")
+ext.devRunDir = { String run -> new File(runsDir, run) }
+
+// The dedicated-server and game-test directories are seeded once and never overwritten: EULA
+// accepted, offline mode for dev accounts, bound to loopback, and on this module's port, well
+// away from the live server's 25565/25566/25575.
+def serverPort = project.property("dev_server_port_${project.name}") as String
+def seededDirs = ['server', 'gametest'].collect { devRunDir(it) }
+def runLabel = "${rootProject.name}-${project.name}"
+ext.seedServerRunDirs = tasks.register('seedServerRunDirs') {
+    description = 'Writes eula.txt and server.properties into the dev server run directories when missing.'
+    doLast {
+        seededDirs.each { dir ->
+            dir.mkdirs()
+            def eula = new File(dir, 'eula.txt')
+            if (!eula.exists()) {
+                eula.text = 'eula=true\n'
+            }
+            def properties = new File(dir, 'server.properties')
+            if (!properties.exists()) {
+                properties.text = """\
+                    # Seeded by the build for the ${runLabel} dev server; written only when missing.
+                    server-ip=127.0.0.1
+                    server-port=${serverPort}
+                    online-mode=false
+                    enable-rcon=false
+                    enable-query=false
+                    motd=Ore Radar dev (${runLabel})
+                    spawn-protection=0
+                    view-distance=6
+                    simulation-distance=6
+                    """.stripIndent()
+            }
+        }
+    }
+}
+
+// Lets the dev server console take commands such as "stop" from the terminal running Gradle.
+tasks.withType(JavaExec).matching { it.name.startsWith('run') }.configureEach {
+    standardInput = System.in
+}

@@ -1,0 +1,33 @@
+// Pure-Java core of Ore Radar: no Minecraft, no runtime dependencies. The loader modules compile
+// these sources into their own jars (DESIGN.md §2); this build exists to run the unit tests.
+plugins {
+    id 'java-library'
+}
+
+group = 'net.loserver.oreradar'
+version = '2.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+    options.compilerArgs += ['-Xlint:all']
+}
+
+test {
+    useJUnitPlatform()
+    maxHeapSize = '1g'
+    testLogging {
+        events 'failed'
+        exceptionFormat 'full'
+    }
+}

@@ -1,0 +1,26 @@
+// The common module of a Minecraft build: vanilla code shared by that build's loaders, plus core's
+// sources (DESIGN.md §2) and shared/java, the vanilla code that is the same on every Minecraft
+// version. It compiles them against plain Minecraft, which keeps loader APIs out of common. Loader
+// modules then compile the same sources into their own jars (gradle/loader.gradle). Apply after
+// conventions.gradle.
+
+def coreDir = new File(rootDir.parentFile, 'core/src/main')
+sourceSets.main.java.srcDir(new File(coreDir, 'java'))
+sourceSets.main.resources.srcDir(new File(coreDir, 'resources'))
+sourceSets.main.java.srcDir(new File(rootDir.parentFile, 'shared/java'))
+
+configurations {
+    commonJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+    commonResources {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+
+artifacts {
+    sourceSets.main.java.srcDirs.each { commonJava it }
+    sourceSets.main.resources.srcDirs.each { commonResources it }
+}

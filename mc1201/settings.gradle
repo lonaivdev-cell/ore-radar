@@ -1,0 +1,26 @@
+// Ore Radar for Minecraft 1.20.1: common (vanilla), forge, fabric. Run from the repository root
+// with the shared wrapper: ./gradlew -p mc1201 <tasks>. BUILDING.md explains the layout.
+pluginManagement {
+    // Plugin versions are shared with mc1211/ through ../gradle.properties.
+    def shared = new Properties()
+    new File(settingsDir.parentFile, 'gradle.properties').withReader('UTF-8') { shared.load(it) }
+
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.neoforged.net/releases' }
+    }
+    plugins {
+        id 'net.neoforged.moddev.legacyforge' version shared.moddev_version
+        id 'net.fabricmc.fabric-loom-remap' version shared.loom_version
+        id 'org.gradle.toolchains.foojay-resolver-convention' version shared.foojay_resolver_version
+    }
+}
+
+plugins {
+    // Lets Gradle download a Java toolchain the machine lacks; does nothing when it is installed.
+    id 'org.gradle.toolchains.foojay-resolver-convention'
+}
+
+rootProject.name = 'mc1201'
+include 'common', 'forge', 'fabric'

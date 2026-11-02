@@ -1,0 +1,22 @@
+# Gradle
+.gradle/
+build/
+
+# Dev game directories (runs/<build>-<module>/<run>, runs/paper-test), built releases, test screenshots
+runs/
+dist/
+test-shots/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+# ...but this one is a test helper, not IDE output.
+!/tools/test/bin/

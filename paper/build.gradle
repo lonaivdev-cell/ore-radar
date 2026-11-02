@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+apply from: "$rootDir/../gradle/conventions.gradle"
+
+repositories {
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "io.papermc.paper:paper-api:${paper_api_version}"
+}
+
+// Core is compiled into the plugin, as into every mod jar (DESIGN.md §2).
+def coreDir = new File(rootDir.parentFile, 'core/src/main')
+sourceSets.main.java.srcDir(new File(coreDir, 'java'))
+sourceSets.main.resources.srcDir(new File(coreDir, 'resources'))
+
+tasks.named('jar', Jar) {
+    archiveClassifier = 'paper'
+}

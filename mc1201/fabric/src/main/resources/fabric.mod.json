@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": ["${mod_authors}"],
+  "contact": {
+    "homepage": "${mod_homepage}",
+    "sources": "${mod_sources}",
+    "issues": "${mod_issues}"
+  },
+  "license": "${mod_license}",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["net.loserver.oreradar.fabric.OreRadarFabric"],
+    "client": ["net.loserver.oreradar.fabric.OreRadarFabricClient"],
+    "modmenu": ["net.loserver.oreradar.fabric.OreRadarModMenu"]
+  },
+  "mixins": ["oreradar.mixins.json"],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_min_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}",
+    "team_reborn_energy": ">=${tr_energy_version}"
+  }
+}

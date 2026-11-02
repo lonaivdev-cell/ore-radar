@@ -1,0 +1,84 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev'
+}
+
+apply from: "$rootDir/../gradle/conventions.gradle"
+apply from: "$rootDir/../gradle/loader.gradle"
+apply from: "$rootDir/gametest.gradle"
+
+neoForge {
+    version = neoforge_version
+
+    // The release mod, and the GameTest mod (gametest.gradle) that only the test runs load.
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "${mod_id}_gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    // NeoForge runs GameTests on vanilla's GameTest server, in a flat world of its own, so unlike
+    // Forge 1.20.1 the run needs no flat level set up for it.
+    runs {
+        configureEach {
+            systemProperty 'neoforge.enabledGameTestNamespaces', mod_id
+        }
+        client {
+            client()
+            gameDirectory = devRunDir('client')
+            jvmArgument '-Xmx3G'
+            loadedMods = [mods.getByName(mod_id)]
+            // Extra game arguments for test helpers, such as
+            // -Poreradar_client_args="--quickPlayMultiplayer 127.0.0.1:25621 --username Tester".
+            if (project.hasProperty('oreradar_client_args')) {
+                programArguments.addAll(project.property('oreradar_client_args').toString().trim().split(/\s+/) as List)
+            }
+        }
+        server {
+            server()
+            gameDirectory = devRunDir('server')
+            programArgument '--nogui'
+            jvmArgument '-Xmx2G'
+            taskBefore seedServerRunDirs
+            loadedMods = [mods.getByName(mod_id)]
+        }
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = devRunDir('gametest')
+            jvmArgument '-Xmx2G'
+            taskBefore seedServerRunDirs
+            sourceSet = sourceSets.gametest
+        }
+        // The dedicated server with the test mod, which times scans on the generated world around
+        // spawn and logs the numbers (see ScanBenchmark).
+        benchServer {
+            server()
+            gameDirectory = devRunDir('server')
+            programArgument '--nogui'
+            jvmArgument '-Xmx2G'
+            systemProperty 'oreradar.bench', 'true'
+            taskBefore seedServerRunDirs
+            sourceSet = sourceSets.gametest
+        }
+    }
+}
+
+neoForge.addModdingDependenciesTo(sourceSets.gametest)
+dependencies {
+    gametestImplementation sourceSets.main.output
+}
+
+// Catalogue, the mod list many packs use, loads logoFile only from the jar's root (it skips a path
+// with a '/'), so the shared icon is packed there too, as neoforge.mods.toml's ${mod_id}.png.
+tasks.named('processResources', ProcessResources) {
+    from(new File(rootDir.parentFile, "shared/resources/assets/${mod_id}/icon.png")) {
+        rename { "${mod_id}.png" }
+    }
+}
+
+tasks.named('jar', Jar) {
+    archiveClassifier = 'neoforge'
+}

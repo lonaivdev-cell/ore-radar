@@ -1,0 +1,91 @@
+plugins {
+    id 'java'
+    id 'net.fabricmc.fabric-loom-remap'
+}
+
+apply from: "$rootDir/../gradle/conventions.gradle"
+apply from: "$rootDir/../gradle/loader.gradle"
+apply from: "$rootDir/gametest.gradle"
+
+repositories {
+    // ModMenu only, compile-only (see below).
+    exclusiveContent {
+        forRepository { maven { url = 'https://maven.terraformersmc.com/releases' } }
+        filter { includeGroup 'com.terraformersmc' }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    // Team Reborn Energy is bundled (jar-in-jar), so players install nothing extra.
+    modImplementation include("teamreborn:energy:${tr_energy_version}")
+    // ModMenu's Config button opens the settings page when ModMenu is installed; it is never
+    // required at run time (DESIGN.md §1), so nothing of it is bundled or pulled in.
+    modCompileOnly("com.terraformersmc:modmenu:${modmenu_version}") { transitive = false }
+}
+
+// The GameTest mod (gametest.gradle) sees everything the release mod sees, plus the mod itself.
+sourceSets.gametest {
+    compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+    runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+}
+
+loom {
+    // Groups each mod's class and resource directories in dev runs; the GameTest mod is a mod of its
+    // own with its own fabric.mod.json, loaded only by the runs whose source set is gametest.
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "${mod_id}_gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    runs {
+        client {
+            client()
+            runDirectory = devRunDir('client')
+            vmArg '-Xmx3G'
+            // Extra game arguments for the test helpers (tools/test/devclient.sh), such as
+            // -Poreradar_client_args="--quickPlayMultiplayer 127.0.0.1:25612 --username Tester".
+            if (project.hasProperty('oreradar_client_args')) {
+                programArgs(project.property('oreradar_client_args').toString().trim().split(/\s+/))
+            }
+        }
+        server {
+            server()
+            runDirectory = devRunDir('server')
+            vmArg '-Xmx2G'
+        }
+        // Fabric's GameTest API runs every registered test on a headless server, then exits.
+        gametest {
+            server()
+            name 'Game Test Server'
+            source sourceSets.gametest
+            runDirectory = devRunDir('gametest')
+            vmArgs '-Xmx2G', '-Dfabric-api.gametest',
+                    "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('gametest/junit.xml').get().asFile}"
+        }
+        // The dedicated server with the test mod, which times scans on the generated world around
+        // spawn and logs the numbers (see ScanBenchmark).
+        benchServer {
+            server()
+            name 'Scan Benchmark Server'
+            source sourceSets.gametest
+            runDirectory = devRunDir('server')
+            vmArgs '-Xmx2G', '-Doreradar.bench=true'
+        }
+    }
+}
+
+tasks.matching { it.name in ['runServer', 'runGametest', 'runBenchServer'] }.configureEach {
+    dependsOn seedServerRunDirs
+}
+
+tasks.named('remapJar') {
+    archiveClassifier = 'fabric'
+}

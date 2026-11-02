@@ -1,0 +1,75 @@
+// The GameTest mod of a 1.20.1 loader module: a second mod, oreradar_gametest, built from the
+// gametest source set and loaded only by the GameTest and benchmark runs, so no test code or test
+// data ships in the release jar. It compiles the shared tests from common/src/gametest (and
+// shared/gametest-java, through common) plus the loader's own glue in src/gametest. Apply after
+// loader.gradle; the loader's build script then puts the source set on Minecraft's classpath and
+// declares the mod and runs.
+
+// src/gametest/java and src/gametest/resources, by Gradle's convention.
+sourceSets {
+    gametest
+}
+
+configurations {
+    commonGametestJava {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    commonGametestJava project(path: ':common', configuration: 'commonGametestJava')
+}
+
+tasks.named('compileGametestJava', JavaCompile) {
+    dependsOn configurations.commonGametestJava
+    source configurations.commonGametestJava
+}
+
+// The test mod's metadata carries the mod version like the real one.
+tasks.named('processGametestResources', ProcessResources) {
+    def props = [mod_version: mod_version, minecraft_version: minecraft_version, java_version: java_version]
+    inputs.properties(props)
+    filesMatching(['META-INF/mods.toml', 'fabric.mod.json']) {
+        expand(props)
+    }
+}
+
+// Empty structure templates the tests are placed in (oreradar:<name>), written as gzipped NBT so
+// both loaders read them from data/oreradar/structures/ like any structure. "tall" has room for a
+// block well above the scan origin, inside the area GameTest clears before each run.
+def structureSizes = [empty: [8, 8, 8], tall: [8, 48, 8]]
+def structuresDir = layout.buildDirectory.dir('generated/gametest-structures')
+def generateGameTestStructures = tasks.register('generateGameTestStructures') {
+    description = 'Writes the empty GameTest structure templates as NBT.'
+    inputs.property('sizes', structureSizes.toString())
+    outputs.dir(structuresDir)
+    doLast {
+        def dir = structuresDir.get().dir('data/oreradar/structures').asFile
+        dir.mkdirs()
+        structureSizes.each { name, size ->
+            new File(dir, "${name}.nbt").withOutputStream { file ->
+                def out = new DataOutputStream(new java.util.zip.GZIPOutputStream(file))
+                out.writeByte(10)                    // TAG_Compound, the unnamed root
+                out.writeUTF('')
+                out.writeByte(3)                     // TAG_Int DataVersion: 1.20.1
+                out.writeUTF('DataVersion')
+                out.writeInt(3465)
+                out.writeByte(9)                     // TAG_List size, of three TAG_Int
+                out.writeUTF('size')
+                out.writeByte(3)
+                out.writeInt(3)
+                size.each { out.writeInt(it) }
+                ['blocks', 'entities', 'palette'].each { key ->
+                    out.writeByte(9)                 // an empty TAG_List
+                    out.writeUTF(key)
+                    out.writeByte(0)
+                    out.writeInt(0)
+                }
+                out.writeByte(0)                     // TAG_End
+                out.close()
+            }
+        }
+    }
+}
+sourceSets.gametest.resources.srcDir(files(structuresDir).builtBy(generateGameTestStructures))

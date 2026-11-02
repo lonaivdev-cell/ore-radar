@@ -1,0 +1,47 @@
+// Vanilla 1.21.1 code shared by neoforge and fabric. ModDevGradle in vanilla mode (neoFormVersion)
+// compiles it against plain Minecraft with Mojang's names.
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev'
+}
+
+apply from: "$rootDir/../gradle/conventions.gradle"
+apply from: "$rootDir/../gradle/common.gradle"
+
+neoForge {
+    neoFormVersion = neoform_version
+}
+
+// Assets shared by every Minecraft version (DESIGN.md §2): textures (drawn by tools/textures.py),
+// models, blockstates and lang files. Published to the loaders like common's own resources;
+// common.gradle has already published the directories it saw, so this one is added here. Data
+// files (recipes, tags, loot tables) stay in src/main/resources: their folder names changed in 1.21.
+def sharedResources = new File(rootDir.parentFile, 'shared/resources')
+sourceSets.main.resources.srcDir(sharedResources)
+artifacts {
+    commonResources sharedResources
+}
+
+// GameTests shared by neoforge and fabric (see ../gametest.gradle). Compiling them here, against
+// plain Minecraft, proves they use no loader API; each loader compiles the same sources again
+// into its own test mod. Test code that is the same on every Minecraft version is in
+// shared/gametest-java.
+sourceSets {
+    gametest {
+        java.srcDir(new File(rootDir.parentFile, 'shared/gametest-java'))
+    }
+}
+neoForge.addModdingDependenciesTo(sourceSets.gametest)
+dependencies {
+    gametestImplementation sourceSets.main.output
+}
+
+configurations {
+    commonGametestJava {
+        canBeResolved = false
+        canBeConsumed = true
+    }
+}
+artifacts {
+    sourceSets.gametest.java.srcDirs.each { commonGametestJava it }
+}

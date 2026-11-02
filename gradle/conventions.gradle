@@ -1,0 +1,62 @@
+// Conventions for every module of the mc1201/, mc1211/ and paper/ builds. Apply it right after a
+// module's plugins block:  apply from: "$rootDir/../gradle/conventions.gradle"
+
+def repoDir = rootDir.parentFile
+
+static Properties readProperties(File file) {
+    def props = new Properties()
+    file.withReader('UTF-8') { props.load(it) }
+    props
+}
+
+// The shared identity and plugin versions become project properties, as if they were in this
+// build's gradle.properties. A -P value given on the command line wins.
+def shared = readProperties(new File(repoDir, 'gradle.properties'))
+shared.each { key, value ->
+    if (!project.hasProperty(key)) {
+        project.ext.set(key, value)
+    }
+}
+
+group = mod_group
+// The jar name carries the Minecraft version (DESIGN.md §1); the metadata files use mod_version.
+version = project.hasProperty('minecraft_version') ? "${mod_version}+${minecraft_version}" : mod_version
+base.archivesName = mod_id
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(java_version as int)
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = java_version as int
+    options.compilerArgs << '-Xlint:all,-processing,-serial,-deprecation,-removal'
+}
+
+// Every key of the shared file and of this build's gradle.properties may appear as ${key} in the
+// loader metadata files.
+def metadataProperties = [:]
+(shared.stringPropertyNames() + readProperties(new File(rootDir, 'gradle.properties')).stringPropertyNames())
+        .findAll { !it.startsWith('org.gradle.') }
+        .each { metadataProperties[it] = project.property(it).toString() }
+
+tasks.named('processResources', ProcessResources) {
+    inputs.properties(metadataProperties)
+    filesMatching(['META-INF/mods.toml', 'META-INF/neoforge.mods.toml', 'fabric.mod.json', 'plugin.yml', 'pack.mcmeta']) {
+        expand(metadataProperties)
+    }
+}
+
+tasks.named('jar', Jar) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    from(new File(repoDir, 'LICENSE')) {
+        rename { "LICENSE_${mod_id}" }
+    }
+    manifest.attributes(
+            'Specification-Title': mod_id,
+            'Specification-Vendor': mod_authors,
+            'Specification-Version': '1',
+            'Implementation-Title': mod_name,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor': mod_authors,
+    )
+}

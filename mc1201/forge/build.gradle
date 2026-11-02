@@ -1,0 +1,103 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev.legacyforge'
+}
+
+apply from: "$rootDir/../gradle/conventions.gradle"
+apply from: "$rootDir/../gradle/loader.gradle"
+apply from: "$rootDir/gametest.gradle"
+
+// Forge runs GameTests in the dedicated server's level, which server.properties makes a normal
+// world, while vanilla's and Fabric's GameTest servers use a flat one. The tests are placed at
+// y -60: deep in ore-filled deepslate in a normal world. So the GameTest run gets a flat level of
+// its own; the two keys are set in place, like any edit to the seeded file.
+def flatGameTestWorld = tasks.register('flatGameTestWorld') {
+    description = 'Points the Forge GameTest run directory at a flat level.'
+    dependsOn seedServerRunDirs
+    def properties = new File(devRunDir('gametest'), 'server.properties')
+    def wanted = ['level-name=flat', 'level-type=minecraft\\:flat']
+    doLast {
+        def lines = properties.readLines('ISO-8859-1')
+        if (!lines.containsAll(wanted)) {
+            lines = lines.findAll { !it.startsWith('level-name=') && !it.startsWith('level-type=') } + wanted
+            properties.write(lines.join('\n') + '\n', 'ISO-8859-1')
+        }
+    }
+}
+
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
+
+    // The release mod, and the GameTest mod (gametest.gradle) that only the test runs load.
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+        "${mod_id}_gametest" {
+            sourceSet sourceSets.gametest
+        }
+    }
+
+    runs {
+        configureEach {
+            systemProperty 'forge.enabledGameTestNamespaces', mod_id
+        }
+        client {
+            client()
+            gameDirectory = devRunDir('client')
+            jvmArgument '-Xmx3G'
+            loadedMods = [mods.getByName(mod_id)]
+            // Extra game arguments for the test helpers (tools/test/devclient.sh), such as
+            // -Poreradar_client_args="--quickPlayMultiplayer 127.0.0.1:25611 --username Tester".
+            if (project.hasProperty('oreradar_client_args')) {
+                programArguments.addAll(project.property('oreradar_client_args').toString().trim().split(/\s+/) as List)
+            }
+        }
+        server {
+            server()
+            gameDirectory = devRunDir('server')
+            programArgument '--nogui'
+            jvmArgument '-Xmx2G'
+            taskBefore seedServerRunDirs
+            loadedMods = [mods.getByName(mod_id)]
+        }
+        gameTestServer {
+            type = 'gameTestServer'
+            gameDirectory = devRunDir('gametest')
+            jvmArgument '-Xmx2G'
+            taskBefore flatGameTestWorld
+            sourceSet = sourceSets.gametest
+        }
+        // The dedicated server with the test mod, which times scans on the generated world around
+        // spawn and logs the numbers (see ScanBenchmark).
+        benchServer {
+            server()
+            gameDirectory = devRunDir('server')
+            programArgument '--nogui'
+            jvmArgument '-Xmx2G'
+            systemProperty 'oreradar.bench', 'true'
+            taskBefore seedServerRunDirs
+            sourceSet = sourceSets.gametest
+        }
+    }
+}
+
+legacyForge.addModdingDependenciesTo(sourceSets.gametest)
+
+// Catalogue, the mod list many Forge packs use, loads logoFile only from the jar's root (it skips a
+// path with a '/'), so the shared icon is packed there too, as mods.toml's ${mod_id}.png.
+tasks.named('processResources', ProcessResources) {
+    from(new File(rootDir.parentFile, "shared/resources/assets/${mod_id}/icon.png")) {
+        rename { "${mod_id}.png" }
+    }
+}
+
+dependencies {
+    gametestImplementation sourceSets.main.output
+}
+
+// ModDevGradle moves this Mojang-named jar to build/devlibs; reobfJar writes the SRG-named
+// release jar under the same name to build/libs.
+tasks.named('jar', Jar) {
+    archiveClassifier = 'forge'
+}

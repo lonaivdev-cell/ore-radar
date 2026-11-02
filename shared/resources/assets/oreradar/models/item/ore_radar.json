@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": { "layer0": "oreradar:item/ore_radar" },
+  "overrides": [
+    { "predicate": { "oreradar:state": 0.5 }, "model": "oreradar:item/ore_radar_scanning" },
+    { "predicate": { "oreradar:state": 1.0 }, "model": "oreradar:item/ore_radar_found" }
+  ]
+}

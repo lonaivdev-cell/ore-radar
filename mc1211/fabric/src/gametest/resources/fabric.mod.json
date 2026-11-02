@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "oreradar_gametest",
+  "version": "${mod_version}",
+  "name": "Ore Radar GameTests",
+  "description": "GameTests and the scan benchmark for Ore Radar; loaded only by the gametest and benchServer dev runs, never shipped.",
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["net.loserver.oreradar.fabric.gametest.OreRadarFabricGameTestMod"],
+    "fabric-gametest": ["net.loserver.oreradar.fabric.gametest.FabricRadarGameTests"]
+  },
+  "depends": {
+    "oreradar": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

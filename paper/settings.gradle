@@ -1,0 +1,17 @@
+// Ore Radar as a Paper plugin, compiled against the 1.20.1 API so one jar serves 1.20.1 to the
+// latest Paper. Run from the repository root with the shared wrapper: ./gradlew -p paper <tasks>.
+pluginManagement {
+    def shared = new Properties()
+    new File(settingsDir.parentFile, 'gradle.properties').withReader('UTF-8') { shared.load(it) }
+
+    plugins {
+        id 'org.gradle.toolchains.foojay-resolver-convention' version shared.foojay_resolver_version
+    }
+}
+
+plugins {
+    // Lets Gradle download a Java toolchain the machine lacks; does nothing when it is installed.
+    id 'org.gradle.toolchains.foojay-resolver-convention'
+}
+
+rootProject.name = 'paper'

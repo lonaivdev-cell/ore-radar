@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "facing=north,lit=false": { "model": "oreradar:block/charging_station" },
+    "facing=east,lit=false": { "model": "oreradar:block/charging_station", "y": 90 },
+    "facing=south,lit=false": { "model": "oreradar:block/charging_station", "y": 180 },
+    "facing=west,lit=false": { "model": "oreradar:block/charging_station", "y": 270 },
+    "facing=north,lit=true": { "model": "oreradar:block/charging_station_on" },
+    "facing=east,lit=true": { "model": "oreradar:block/charging_station_on", "y": 90 },
+    "facing=south,lit=true": { "model": "oreradar:block/charging_station_on", "y": 180 },
+    "facing=west,lit=true": { "model": "oreradar:block/charging_station_on", "y": 270 }
+  }
+}

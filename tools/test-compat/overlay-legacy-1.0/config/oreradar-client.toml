@@ -1,0 +1,58 @@
+
+#What the radar looks for and how far.
+[detection]
+	#Outlines are drawn for every match closer than (distance to the nearest match + extraChunks * 16 blocks).
+	#Lower it if the screen gets crowded, raise it to see more of a vein field at once.
+	#Range: 0 ~ 16
+	extraChunks = 1
+	#Hard limit in blocks (3D distance). The client only knows the chunks the server sent it,
+	#so anything beyond your view distance is never found anyway.
+	#Range: 16 ~ 512
+	maxRadius = 128
+	#At most this many blocks are outlined, nearest first.
+	#Range: 1 ~ 4096
+	maxOutlines = 256
+	#Ticks between the end of one scan and the start of the next (20 ticks = 1 second).
+	#Range: 1 ~ 200
+	scanIntervalTicks = 10
+	#CPU time a scan may use per client tick, in microseconds. A scan that needs more simply
+	#continues on the next tick, so this trades scan speed against frame time.
+	#Range: 200 ~ 20000
+	scanBudgetMicros = 2000
+	#Where the radar must be to work: HANDS (main or off hand), HOTBAR, or anywhere in the INVENTORY.
+	#Allowed Values: HANDS, HOTBAR, INVENTORY
+	activeFrom = "HANDS"
+
+#How matches are drawn. Outlines are an overlay projected from the 3D view, so they show
+#through walls and are not affected by shader packs.
+[outline]
+	#Outline colour as #RRGGBB.
+	color = "#FFB347"
+	#Colour of the nearest match, which also pulses slightly.
+	nearestColor = "#FF5A36"
+	#Line width in screen pixels.
+	#Range: 0.5 ~ 8.0
+	lineWidth = 3.0
+	#Opacity of the lines, 0 to 1.
+	#Range: 0.05 ~ 1.0
+	lineAlpha = 0.9
+	#Opacity of the soft glow around each line, 0 turns it off.
+	#Range: 0.0 ~ 1.0
+	glow = 0.22
+	#Opacity of the faint fill on the faces of matched blocks (the "semi x-ray"), 0 turns it off.
+	#Range: 0.0 ~ 0.6
+	fillAlpha = 0.2
+	#Fade outlines with distance, so nearby matches stand out.
+	distanceFade = true
+
+#The direction indicator and sound.
+[hud]
+	#Where the arrow and distance to the nearest match are shown. HIDDEN turns them off.
+	#Allowed Values: CROSSHAIR, TOP_LEFT, TOP_CENTER, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, HIDDEN
+	anchor = "CROSSHAIR"
+	#Geiger-style ping that speeds up as you get closer to the nearest match.
+	ping = true
+	#Ping volume, 0 to 1.
+	#Range: 0.0 ~ 1.0
+	pingVolume = 0.5
+

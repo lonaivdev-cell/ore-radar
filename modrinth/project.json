@@ -1,0 +1,18 @@
+{
+  "title": "Ore Radar",
+  "slug": "ore-radar",
+  "summary": "A handheld radar that finds the nearest ore, or any block the server allows, and guides you to it with see-through outlines, an arrow and a beep. Mods for Forge, NeoForge and Fabric; a Paper plugin for vanilla players.",
+  "project_type": "mod",
+  "categories": [
+    "utility",
+    "equipment"
+  ],
+  "additional_categories": [],
+  "client_side": "optional",
+  "server_side": "required",
+  "license_id": "MIT",
+  "body_file": "description.md",
+  "icon_file": "icon.png",
+  "source_url": "https://github.com/lonaivdev-cell/ore-radar",
+  "issues_url": "https://github.com/lonaivdev-cell/ore-radar/issues"
+}

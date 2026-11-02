@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable_with_bottom",
+  "textures": {
+    "top": "oreradar:block/charging_station_top",
+    "bottom": "oreradar:block/charging_station_bottom",
+    "side": "oreradar:block/charging_station_side",
+    "front": "oreradar:block/charging_station_front"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "replace": false,
+  "groups": [
+    ["minecraft:clay", "minecraft:gravel"]
+  ]
+}

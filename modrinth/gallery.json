@@ -1,0 +1,10 @@
+[
+  {"file": "gallery/1-radar-screen.png", "title": "The radar screen", "description": "Pick a target from the tabs or search by name, @mod or #tag. The preview shows what the last scan found and the charge left.", "featured": true},
+  {"file": "gallery/2-outlines-and-arrow.png", "title": "Outlines and arrow", "description": "Veins are outlined through the stone; the arrow under the crosshair shows the distance and height to the nearest one.", "featured": false},
+  {"file": "gallery/3-with-iris-shaders.png", "title": "With shaders", "description": "Fabric 1.20.1 with Iris and Complementary Reimagined.", "featured": false},
+  {"file": "gallery/4-in-a-modpack.png", "title": "In a big modpack", "description": "Forge 1.20.1 in the DeceasedCraft modpack, with the outline colours changed in the client settings. The nearest vein is drawn brighter.", "featured": false},
+  {"file": "gallery/5-radar-tooltip.png", "title": "Charge", "description": "The tooltip shows the target and the charge, and says how to recharge when it runs low.", "featured": false},
+  {"file": "gallery/6-charging-station.png", "title": "Charging Station", "description": "Burns redstone, coal, charcoal or glowstone dust, or takes FE / Team Reborn Energy, and charges the radar.", "featured": false},
+  {"file": "gallery/7-paper-outlines.png", "title": "Paper: outlines for vanilla players", "description": "With the Paper plugin, matches glow through stone for players without any mod.", "featured": false},
+  {"file": "gallery/8-paper-action-bar.png", "title": "Paper: compass and action bar", "description": "On Paper the radar is a compass: the needle points to the nearest match and the action bar shows the distance and charge.", "featured": false}
+]

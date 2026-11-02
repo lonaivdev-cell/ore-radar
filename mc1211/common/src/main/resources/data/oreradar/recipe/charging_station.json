@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ILI",
+    "CBC",
+    "III"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "L": { "item": "minecraft:lightning_rod" },
+    "C": { "item": "minecraft:copper_ingot" },
+    "B": { "item": "minecraft:redstone_block" }
+  },
+  "result": { "id": "oreradar:charging_station", "count": 1 }
+}

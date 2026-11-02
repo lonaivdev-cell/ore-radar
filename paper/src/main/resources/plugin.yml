@@ -1,0 +1,24 @@
+name: OreRadar
+version: '${mod_version}'
+main: net.loserver.oreradar.paper.OreRadarPlugin
+api-version: '${paper_api_level}'
+# Everything runs on the server thread (scans, stations, displays); Folia's regions are not supported.
+folia-supported: false
+description: '${plugin_description}'
+authors: [${mod_authors}]
+website: '${mod_homepage}'
+
+commands:
+  oreradar:
+    description: Ore Radar items, rules and admin tools.
+    usage: '/<command> give <player> [radar|station] | reload | info | target <players> <spec|clear> | charge <players> <amount|full|empty>'
+
+permissions:
+  oreradar.use:
+    description: Use an Ore Radar and /oreradar info.
+    default: true
+  oreradar.admin:
+    description: Use /oreradar give, reload, target and charge.
+    default: op
+    children:
+      oreradar.use: true

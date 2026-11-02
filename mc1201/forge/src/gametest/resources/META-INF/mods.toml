@@ -1,0 +1,17 @@
+# The GameTest mod: loaded only by the gameTestServer and benchServer dev runs (gametest.gradle).
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+modId="oreradar_gametest"
+version="${mod_version}"
+displayName="Ore Radar GameTests"
+description='''GameTests and the scan benchmark for Ore Radar; never shipped.'''
+
+[[dependencies.oreradar_gametest]]
+    modId="oreradar"
+    mandatory=true
+    versionRange="[${mod_version},)"
+    ordering="AFTER"
+    side="BOTH"
