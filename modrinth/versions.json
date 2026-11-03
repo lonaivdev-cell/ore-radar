@@ -11,7 +11,7 @@
     ],
     "environment": "client_and_server",
     "dependencies": [],
-    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (tested on Paper 1.20.1, 1.21.1 and 26.3; the other versions listed were not tested). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
     "featured": true,
     "file": "../dist/oreradar-2.0.0+1.20.1-forge.jar"
   },
@@ -32,7 +32,7 @@
         "dependency_type": "required"
       }
     ],
-    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (tested on Paper 1.20.1, 1.21.1 and 26.3; the other versions listed were not tested). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
     "featured": true,
     "file": "../dist/oreradar-2.0.0+1.20.1-fabric.jar"
   },
@@ -48,7 +48,7 @@
     ],
     "environment": "client_and_server",
     "dependencies": [],
-    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (tested on Paper 1.20.1, 1.21.1 and 26.3; the other versions listed were not tested). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
     "featured": true,
     "file": "../dist/oreradar-2.0.0+1.21.1-neoforge.jar"
   },
@@ -69,7 +69,7 @@
         "dependency_type": "required"
       }
     ],
-    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (tested on Paper 1.20.1, 1.21.1 and 26.3; the other versions listed were not tested). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
     "featured": true,
     "file": "../dist/oreradar-2.0.0+1.21.1-fabric.jar"
   },
@@ -83,13 +83,11 @@
     "game_versions": [
       "1.20.1",
       "1.20.2",
-      "1.20.3",
       "1.20.4",
       "1.20.5",
       "1.20.6",
       "1.21",
       "1.21.1",
-      "1.21.2",
       "1.21.3",
       "1.21.4",
       "1.21.5",
@@ -99,7 +97,6 @@
       "1.21.9",
       "1.21.10",
       "1.21.11",
-      "26.1",
       "26.1.1",
       "26.1.2",
       "26.2",
@@ -107,7 +104,7 @@
     ],
     "environment": "server_only",
     "dependencies": [],
-    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (tested on Paper 1.20.1, 1.21.1 and 26.3; the other versions listed were not tested). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "First public release: Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
     "featured": true,
     "file": "../dist/oreradar-2.0.0-paper.jar"
   }

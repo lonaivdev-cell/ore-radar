@@ -6,6 +6,7 @@
 #   3. items-test.js (radars never stack nor craft, the station's radar slot, drain on a moving radar, GUI clicks),
 #   4. lifecycle-test.js (station persistence across a restart, drops, explosion, pistons, leftovers),
 # and stops the server. Logs go to $OR_SCRATCH/test-results/<version>/. Exit 1 if anything failed.
+# OR_TESTS="bot-test" runs only the suites it names (step 1 always runs).
 #
 #   tools/test-paper/run-all.sh 1.20.1 1.21.1 26.3
 #
@@ -29,6 +30,23 @@ for version in "$@"; do
         1.20.1) java=$HOME/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2/bin/java; client=() ;;
         1.21.1) java=/opt/graalvm-21/bin/java; client=() ;;
         26.3) java=$scratch/jdk25/bin/java; client=(OR_CLIENT_VERSION=26.1 OR_STILL=1) ;;
+        # Other versions: mineflayer joins with the same protocol under another name, or as 26.1
+        # through ViaVersion/ViaBackwards (copied from 26.3's plugins).
+        1.20.[2-4]) java=$HOME/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2/bin/java; client=() ;;
+        # 1.20.5: the bot (as 1.20.6, or as 1.20.4 through ViaBackwards) drops on entering the Nether:
+        # mineflayer cannot decode a 1.20.5 item component (PartialReadError in ArmorTrimMaterial). It
+        # happens with no plugin at all, so bot-test's three Nether checks fail there; the rest pass.
+        1.20.5) java=/opt/graalvm-21/bin/java; client=(OR_CLIENT_VERSION=1.20.6) ;;
+        1.21) java=/opt/graalvm-21/bin/java; client=(OR_CLIENT_VERSION=1.21.1) ;;
+        1.21.3) java=/opt/graalvm-21/bin/java; client=(OR_CLIENT_VERSION=1.21.4) # mineflayer misreads 1.21.3 items
+            mkdir -p "$scratch/paper-runs/$version/plugins"
+            cp "$scratch"/paper-runs/26.3/plugins/Via{Version,Backwards}.jar "$scratch/paper-runs/$version/plugins/" ;;
+        1.21.7) java=/opt/graalvm-21/bin/java; client=(OR_CLIENT_VERSION=1.21.8) ;;
+        1.21.10) java=/opt/graalvm-21/bin/java; client=(OR_CLIENT_VERSION=1.21.9) ;;
+        1.20.6 | 1.21.*) java=/opt/graalvm-21/bin/java; client=() ;;
+        26.*) java=$scratch/jdk25/bin/java; client=(OR_CLIENT_VERSION=26.1 OR_STILL=1)
+            mkdir -p "$scratch/paper-runs/$version/plugins"
+            cp "$scratch"/paper-runs/26.3/plugins/Via{Version,Backwards}.jar "$scratch/paper-runs/$version/plugins/" ;;
         *) echo "run-all.sh: unknown version $version" >&2; exit 2 ;;
     esac
     echo "== Paper $version"
@@ -36,7 +54,7 @@ for version in "$@"; do
     run=$scratch/paper-runs/$version
     "$java" "$here/ApiCheck.java" "$plugin_jar" "$run/versions" "$run/libraries" > "$out/api-check.txt" 2>&1 || failed=1
     echo "api-check: $(tail -n 1 "$out/api-check.txt")"
-    for test in bot-test items-test lifecycle-test; do
+    for test in ${OR_TESTS:-bot-test items-test lifecycle-test}; do
         env "${client[@]}" "$repo/tools/limited.sh" node "$here/$test.js" "$version" > "$out/$test.txt" 2>&1 || failed=1
         echo "$test: $(grep -c '^PASS' "$out/$test.txt") passed, $(grep -c '^FAIL' "$out/$test.txt") failed"
         grep '^FAIL' "$out/$test.txt"

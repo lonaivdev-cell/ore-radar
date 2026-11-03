@@ -9,6 +9,7 @@
 #
 # Versions and their ports / JDKs (DESIGN.md §12 gives Paper 25631-25639):
 #   1.20.1 -> 25631, Java 17     1.21.1 -> 25632, Java 21     26.3 -> 25633, Java 25
+#   any other: 25634, with Java 17 (1.20.2-1.20.4), 21 (1.20.5-1.21.11) or 25 (26.x)
 # Environment: OR_SCRATCH (default: runs/paper-test, git-ignored; see BUILDING.md) holds paper-servers/<jar>,
 # paper-runs/<version>/ and jdk25/. OR_PLUGIN_JAR overrides the plugin jar (default: paper/build/libs).
 set -euo pipefail
@@ -26,6 +27,10 @@ case $version in
     1.20.1) port=25631 java=$HOME/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2/bin/java ;;
     1.21.1) port=25632 java=/opt/graalvm-21/bin/java ;;
     26.3) port=25633 java=$scratch/jdk25/bin/java ;;
+    # Any other version (tools/test-paper/compat.sh), one at a time on 25634.
+    1.20.[2-4]) port=25634 java=$HOME/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2/bin/java ;;
+    1.20.[5-6] | 1.21 | 1.21.*) port=25634 java=/opt/graalvm-21/bin/java ;;
+    26.*) port=25634 java=$scratch/jdk25/bin/java ;;
     *) echo "server.sh: unknown version $version" >&2; exit 2 ;;
 esac
 server_jar=$(ls "$scratch"/paper-servers/paper-"$version"-*.jar 2>/dev/null | head -n 1)

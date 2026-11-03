@@ -64,7 +64,7 @@ Open **Versions** → **Create a version**, once per entry in `versions.json`:
 | Version number | `version_number`, e.g. `2.0.0+1.20.1-forge` |
 | Release channel | Release |
 | Loaders | `loaders` |
-| Game versions | `game_versions` (Paper: every release from 1.20.1 to 26.3; only 1.20.1, 1.21.1 and 26.3 were tested, and the page and changelog say so) |
+| Game versions | `game_versions` (Paper: the 20 in `versions.json`, every Paper server from 1.20.1 to 26.3; Paper has none for 1.20.3, 1.21.2 or 26.1) |
 | Environment | the mods: client and server, both required; Paper: server only |
 | Dependencies | the Fabric jars: add **Fabric API** as *Required* (Team Reborn Energy is inside the jar, so do not add it) |
 | Changelog | `changelog` |

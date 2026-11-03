@@ -1,7 +1,7 @@
 {
   "title": "Ore Radar",
   "slug": "ore-radar",
-  "summary": "A handheld radar that finds the nearest ore, or any block the server allows, and guides you to it with see-through outlines, an arrow and a beep. Mods for Forge, NeoForge and Fabric; a Paper plugin for vanilla players.",
+  "summary": "Pick an ore and the radar finds the nearest vein, then leads you to it: outlines through the stone, an arrow with the distance, a beep that speeds up as you close in. Light and server-controlled, for Forge, NeoForge, Fabric and Paper.",
   "project_type": "mod",
   "categories": [
     "utility",

@@ -380,17 +380,19 @@ async function nether (p, bx, bz, y) {
     if (!unbuilt) break
   }
   const outs = [await inNether(`fill ${bx - 3} ${ny - 1} ${bz - 3} ${bx + 3} ${ny - 1} ${bz + 3} minecraft:glass`),
-    await inNether(`setblock ${bx + 20} ${ny} ${bz} minecraft:ancient_debris`)]
+    await inNether(`setblock ${bx + 20} ${ny} ${bz} minecraft:emerald_ore`)]
   check('the Nether scene is built', !unbuilt && !outs.some(o => /not loaded/.test(o)), outs.map(o => o.trim().split('\n').pop()).join(' | '))
   await inNether(`tp Prospector ${bx + 0.5} ${ny} ${bz + 0.5} -90 0`)
   await inNether(`forceload remove ${area}`)
   await sleep(1500)
-  await consoleCmd('oreradar target Prospector minecraft:ancient_debris', 2500)
+  // Emerald ore never generates in the Nether, so no natural block can be nearer than the scene's
+  // (natural ancient debris was, on the 1.20.5/1.20.6 worlds of the same seed).
+  await consoleCmd('oreradar target Prospector minecraft:emerald_ore', 2500)
   const needleAt = async want => waitFor(async () => { const n = await serverNeedle('Prospector'); return n && n.pos && n.pos.join() === want.join() ? n : null }, 5000, 500)
   const far = [bx + 20, ny, bz], near = [bx + 10, ny, bz]
   let n = await needleAt(far)
   check('in the Nether the needle is the radar\'s lodestone, untracked', n && !n.tracked, n ? `lodestone ${n.pos}` : `needle ${JSON.stringify(await serverNeedle('Prospector'))}`)
-  await inNether(`setblock ${near.join(' ')} minecraft:ancient_debris`)
+  await inNether(`setblock ${near.join(' ')} minecraft:emerald_ore`)
   await sleep(2500)
   n = await serverNeedle('Prospector')
   check('a nearer match in the same direction does not move it (no rewrite)', n && n.pos && n.pos.join() === far.join(), n && `lodestone ${n.pos}`)

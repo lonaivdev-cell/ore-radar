@@ -14,9 +14,10 @@ const mineflayer = require('mineflayer')
 const nbt = require('prismarine-nbt')
 
 const PORTS = { '1.20.1': 25631, '1.21.1': 25632, '26.3': 25633 }
+// Every other version (tools/test-paper/compat.sh) runs alone on 25634.
+const portFor = (version) => PORTS[version] || 25634
 
 function harness (version) {
-  if (!PORTS[version]) throw new Error(`unknown version ${version}; expected one of ${Object.keys(PORTS).join(', ')}`)
   const scratch = process.env.OR_SCRATCH || path.join(__dirname, '..', '..', 'runs', 'paper-test')
   const run = path.join(scratch, 'paper-runs', version)
   const fifo = path.join(run, 'console.fifo')
@@ -78,7 +79,17 @@ function harness (version) {
   /** A bot that has spawned; {@code setup(bot)}, if given, runs before it connects, e.g. to watch packets sent at join. */
   function join (username, setup) {
     return new Promise((resolve, reject) => {
-      const bot = mineflayer.createBot({ host: '127.0.0.1', port: PORTS[version], username, version: clientVersion, auth: 'offline' })
+      const bot = mineflayer.createBot({ host: '127.0.0.1', port: portFor(version), username, version: clientVersion, auth: 'offline' })
+      // mineflayer sends sneaking only as player_input from 1.21.3 on, but servers before 1.21.6 still
+      // take it from entity_action, as a real client of those versions also sends it.
+      if (['1.21.3', '1.21.4', '1.21.5'].includes(clientVersion)) bot.once('login', () => {
+        const setControlState = bot.setControlState.bind(bot)
+        bot.setControlState = (control, state) => {
+          const changed = control === 'sneak' && bot.getControlState('sneak') !== state
+          setControlState(control, state)
+          if (changed) bot._client.write('entity_action', { entityId: bot.entity.id, actionId: state ? 'start_sneaking' : 'stop_sneaking', jumpBoost: 0 })
+        }
+      })
       if (setup) setup(bot)
       if (still) {
         const write = bot._client.write.bind(bot._client)

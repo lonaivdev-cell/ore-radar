@@ -5,8 +5,8 @@
 The first public release. Ore Radar 1.0 was a Forge 1.20.1 mod for one server; 2.0 is a rewrite.
 
 - **Loaders:** Forge 1.20.1, Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1, and a Paper plugin
-  for 1.20.1 to 26.3 that works with plain vanilla clients (tested on 1.20.1, 1.21.1 and 26.3;
-  the versions in between were not tested).
+  for 1.20.1 to 26.3 that works with plain vanilla clients. Tested on every Paper version in that
+  range, and the mods at both ends of each loader's version range.
 - **The server scans.** Clients only draw what the server sends. Scans never load chunks and
   share one time budget per server tick (2 ms by default) among all players.
 - **Radar screen:** category tabs, search (`@mod`, `#tag`), favourites and recent targets, a

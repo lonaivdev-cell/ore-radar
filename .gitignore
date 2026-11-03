@@ -20,3 +20,6 @@ out/
 bin/
 # ...but this one is a test helper, not IDE output.
 !/tools/test/bin/
+
+# Python
+__pycache__/

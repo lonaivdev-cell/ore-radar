@@ -47,6 +47,7 @@ tools/limited.sh, tools/smoke-server.sh
 tools/test/                  1.20.1 client rig (Xvfb :81, dev server/client, screenshots)
 tools/test-1211/             1.21.1 client rig (Xvfb :82), reusing tools/test/'s helpers
 tools/test-paper/            Paper test servers and mineflayer bot suites
+tools/test-compat/           loader-version matrix (matrix.sh, boot.sh, linkcheck.py); shader and DeceasedCraft scenes
 runs/<build>-<module>/<run>  dev game directories (git-ignored)
 ```
 
@@ -181,6 +182,37 @@ outside `build/`, so `clean` keeps the worlds.
 | Fabric API | 0.92.12+1.20.1, 0.116.17+1.21.1 | latest for each version |
 | Team Reborn Energy | 3.0.0 (1.20.1), 4.1.0 (1.21.1), jar-in-jar | 3.0.0 needs MC ≥1.19.4 and Java 17; 4.1.0 is the last for 1.21–1.21.4 (4.2.0 needs 1.21.5, 5.0.0 needs 26.1) |
 | Paper API | 1.20.1-R0.1-20230921.165944-178 | the final build of `1.20.1-R0.1-SNAPSHOT`, pinned so a cached build never asks the network whether the snapshot moved |
+
+## Compatibility matrix
+
+The release jars accept a range of loader versions, not only the ones they are built against.
+`tools/test-compat/matrix.sh` proves the ends of each range on real production servers, installed
+in `runs/compat/<target>/` with the official installers (Fabric: the server launcher plus Fabric
+API from Modrinth). For each target it boots the jar (`boot.sh`: Done, init line, config written,
+`/oreradar info`, clean stop, no Ore Radar errors) and runs `linkcheck.py`. That check reads the
+bytecode only, so it covers client code on a server install too. Every loader API reference must
+resolve (lambdas included), and every method that overrides an API method in the build version
+must still override one.
+
+| Jar | Targets |
+|---|---|
+| 1.20.1 Forge | Forge 47.0.0, 47.4.0 (build), 47.4.28; NeoForge 47.1.106 for 1.20.1 |
+| 1.20.1 Fabric | Loader 0.15.0 + Fabric API 0.83.0 (the oldest); Loader 0.20.1 + Fabric API 0.92.12 |
+| 1.21.1 NeoForge | NeoForge 21.1.1 (the oldest), 21.1.265 (build) |
+| 1.21.1 Fabric | Loader 0.15.11 + Fabric API 0.102.0 (the oldest pair); Loader 0.20.1 + Fabric API 0.116.17 |
+
+`tools/test-paper/compat.sh <versions...>` does the same for the plugin on each Paper version: it
+downloads Paper (sha256-checked), then runs the API check and `bot-test.js` (`OR_TESTS` selects the
+suites). Versions other than 1.20.1, 1.21.1 and 26.3 run on port 25634; mineflayer joins with the
+same protocol under another name (1.20.5 as 1.20.6, 1.21 as 1.21.1, 1.21.7 as 1.21.8, 1.21.10 as
+1.21.9), and 26.x as 26.1 through ViaVersion.
+1.21.3 joins as 1.21.4 through ViaVersion (mineflayer misreads 1.21.3 items), and the harness also
+sends the old sneak packet on 1.21.3 to 1.21.5, as a real client of those versions does.
+
+Results (2026-11-03, the 2.0.0 release jars): all ten loader targets pass boot and linkage. Paper:
+API check passes on all 20 versions and bot-test (59 checks) on 19. On 1.20.5 the bot drops on
+entering the Nether, with or without the plugin (a mineflayer decode error), so its three Nether
+checks fail there.
 
 ## Known quirks
 

@@ -18,7 +18,7 @@ chunks, and all players' scans share a small time budget per server tick.
 | Fabric 1.20.1 | `oreradar-2.0.0+1.20.1-fabric.jar` + Fabric API | the same jar and Fabric API |
 | NeoForge 1.21.1 | `oreradar-2.0.0+1.21.1-neoforge.jar` | the same jar |
 | Fabric 1.21.1 | `oreradar-2.0.0+1.21.1-fabric.jar` + Fabric API | the same jar and Fabric API |
-| Paper 1.20.1 to 26.3 (tested: 1.20.1, 1.21.1, 26.3) | `oreradar-2.0.0-paper.jar` (a plugin) | nothing: plain vanilla clients |
+| Paper 1.20.1 to 26.3 | `oreradar-2.0.0-paper.jar` (a plugin) | nothing: plain vanilla clients |
 
 **Mods: install on the server and on every client.** A player without the mod cannot load the
 chunks that hold a Charging Station (Forge turns them away at login; Fabric and NeoForge let
