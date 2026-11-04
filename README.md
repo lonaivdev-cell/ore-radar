@@ -14,7 +14,7 @@ chunks, and all players' scans share a small time budget per server tick.
 
 | Server | File | Players need |
 |---|---|---|
-| Forge 1.20.1 (47.4+) | `oreradar-2.0.0+1.20.1-forge.jar` | the same jar |
+| Forge 1.20.1 (47.0+) or NeoForge 1.20.1 | `oreradar-2.0.0+1.20.1-forge.jar` | the same jar |
 | Fabric 1.20.1 | `oreradar-2.0.0+1.20.1-fabric.jar` + Fabric API | the same jar and Fabric API |
 | NeoForge 1.21.1 | `oreradar-2.0.0+1.21.1-neoforge.jar` | the same jar |
 | Fabric 1.21.1 | `oreradar-2.0.0+1.21.1-fabric.jar` + Fabric API | the same jar and Fabric API |

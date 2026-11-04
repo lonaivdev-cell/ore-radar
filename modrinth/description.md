@@ -12,7 +12,7 @@ chunks, and all players' scans share one small time budget per server tick (2 ms
 
 | Server | File | Players need |
 |---|---|---|
-| Forge 1.20.1 | `2.0.0+1.20.1-forge` | the same file |
+| Forge or NeoForge 1.20.1 | `2.0.0+1.20.1-forge` | the same file |
 | Fabric 1.20.1 | `2.0.0+1.20.1-fabric` + Fabric API | the same file and Fabric API |
 | NeoForge 1.21.1 | `2.0.0+1.21.1-neoforge` | the same file |
 | Fabric 1.21.1 | `2.0.0+1.21.1-fabric` + Fabric API | the same file and Fabric API |
