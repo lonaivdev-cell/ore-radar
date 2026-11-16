@@ -12,12 +12,12 @@ chunks, and all players' scans share one small time budget per server tick (2 ms
 
 | Server | File | Players need |
 |---|---|---|
-| Forge 1.20.1 | `2.0.1+1.20.1-forge` | the same file |
-| NeoForge 1.20.1 | `2.0.1+1.20.1-neoforge` | the same file |
-| Fabric 1.20.1 | `2.0.1+1.20.1-fabric` + Fabric API | the same file and Fabric API |
-| NeoForge 1.21.1 | `2.0.1+1.21.1-neoforge` | the same file |
-| Fabric 1.21.1 | `2.0.1+1.21.1-fabric` + Fabric API | the same file and Fabric API |
-| Paper 1.20.1 to 26.3 | `2.0.0+paper` (a plugin) | nothing: plain vanilla clients |
+| Forge 1.20.1 | 2.0.1 (Forge 1.20.1) | the same file |
+| NeoForge 1.20.1 | 2.0.1 (NeoForge 1.20.1) | the same file |
+| Fabric 1.20.1 | 2.0.1 (Fabric 1.20.1) + Fabric API | the same file and Fabric API |
+| NeoForge 1.21.1 | 2.0.1 (NeoForge 1.21.1) | the same file |
+| Fabric 1.21.1 | 2.0.1 (Fabric 1.21.1) + Fabric API | the same file and Fabric API |
+| Paper 1.20.1 to 26.3 | 2.0.0 (Paper) (a plugin) | nothing: plain vanilla clients |
 
 Pick the file whose name matches both your Minecraft version and your loader: a 1.20.1 file does
 not load on 1.21.1.

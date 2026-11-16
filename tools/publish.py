@@ -13,7 +13,7 @@ CurseForge game-version id and prints what it would upload, and sends nothing.
   API token from CurseForge account settings) in the environment. Behind a proxy that adds the
   tokens itself, set both to "proxy-injected".
 - CurseForge project: curseforge_project_id in modrinth/project.json, or --curseforge-project.
-- Repeats: a Modrinth version with the same version_number and loaders is skipped. CurseForge has
+- Repeats: a Modrinth version with the same version_number, loaders and game versions is skipped. CurseForge has
   no way to list a project's files through this API, so uploads are recorded in
   dist/published.json and skipped on a second run from the same checkout.
 """
@@ -97,12 +97,14 @@ def modrinth(entries, slug, publish):
         sys.exit(f"publish.py: Modrinth project {slug}: HTTP {status} {body[:200]!r}")
     project_id = json.loads(body)["id"]
     status, body = request("GET", f"{MODRINTH}/project/{slug}/version")
-    existing = {(v["version_number"], tuple(sorted(v["loaders"]))) for v in json.loads(body)} if status == 200 else set()
+    # The same version number is used for every loader and Minecraft version, so all three identify one.
+    def key(v):
+        return v["version_number"], tuple(sorted(v["loaders"])), tuple(sorted(v["game_versions"]))
+    existing = {key(v) for v in json.loads(body)} if status == 200 else set()
     auth = {"Authorization": token("MODRINTH_TOKEN")}
     for entry in entries:
         jar = checked_jar(entry)
-        key = (entry["version_number"], tuple(sorted(entry["loaders"])))
-        if key in existing:
+        if key(entry) in existing:
             print(f"modrinth: {entry['name']}: already there, skipped")
             continue
         data = {

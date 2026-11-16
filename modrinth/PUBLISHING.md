@@ -61,7 +61,7 @@ Open **Versions** → **Create a version**, once per entry in `versions.json`:
 |---|---|
 | File | the `file` of the entry (a jar in `../dist/`) |
 | Version name | `name` |
-| Version number | `version_number`, e.g. `2.0.0+1.20.1-forge` |
+| Version number | `version_number`, e.g. `2.0.1` (the same for every loader; the name tells them apart) |
 | Release channel | Release |
 | Loaders | `loaders` |
 | Game versions | `game_versions` (Paper: the 20 in `versions.json`, every Paper server from 1.20.1 to 26.3; Paper has none for 1.20.3, 1.21.2 or 26.1) |
