@@ -97,3 +97,18 @@ approval, `https://modrinth.com/mod/ore-radar` (the homepage written into the ja
    CurseForge shows `+` as `-` in file names; that is expected.
 4. On both sites, take the **NeoForge** tag off the 2.0.0 Forge 1.20.1 file (or archive that
    file), so the launchers stop offering a Forge jar to NeoForge instances.
+
+## Uploading with tools/publish.py
+
+`tools/publish.py` does steps 2 and 3 above through the stores' APIs: one upload per entry of
+`versions.json` for the mod version (Paper skipped). It is a dry run unless given `--publish`.
+
+```bash
+export MODRINTH_TOKEN=...      # Modrinth: Settings → PATs, scope "Create versions"
+export CURSEFORGE_TOKEN=...    # CurseForge: account settings → API tokens
+tools/publish.py               # dry run: checks jars against SHA256SUMS, prints what it would send
+tools/publish.py --publish     # uploads
+```
+
+The CurseForge project id is `curseforge_project_id` in `project.json`. Step 4 (untagging the old
+file) stays manual: the upload API cannot edit a file once it is up.
