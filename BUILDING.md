@@ -202,7 +202,7 @@ must still override one.
 | Jar | Targets |
 |---|---|
 | 1.20.1 Forge | Forge 47.0.0, 47.4.0 (the live server), 47.4.29 (build) |
-| 1.20.1 NeoForge | NeoForge 47.1.5 (the oldest), 47.1.106 (build) |
+| 1.20.1 NeoForge | NeoForge 47.1.79, 47.1.106 (build) |
 | 1.20.1 Fabric | Loader 0.15.0 + Fabric API 0.83.0 (the oldest); Loader 0.20.1 + Fabric API 0.92.12 |
 | 1.21.1 NeoForge | NeoForge 21.1.1 (the oldest), 21.1.266 (build) |
 | 1.21.1 Fabric | Loader 0.15.11 + Fabric API 0.102.0 (the oldest pair); Loader 0.20.1 + Fabric API 0.116.18 |
@@ -215,9 +215,11 @@ same protocol under another name (1.20.5 as 1.20.6, 1.21 as 1.21.1, 1.21.7 as 1.
 1.21.3 joins as 1.21.4 through ViaVersion (mineflayer misreads 1.21.3 items), and the harness also
 sends the old sneak packet on 1.21.3 to 1.21.5, as a real client of those versions does.
 
-Results (2026-11-03, the 2.0.0 release jars): all ten loader targets pass boot and linkage. Paper:
-API check passes on all 20 versions and bot-test (59 checks) on 19. On 1.20.5 the bot drops on
-entering the Nether, with or without the plugin (a mineflayer decode error), so its three Nether
+Results (2026-11-16, the 2.0.1 mod jars): all eleven loader targets pass boot and linkage. Older
+NeoForge 1.20.1 servers (47.1.5, 47.1.28, 47.1.54) crash in NeoForge's own bootstrap launcher
+("Duplicate key ... loader-47.1.x.jar") even with no mods, so 47.1.79 is the oldest that boots;
+the jar's linkage check passes on all of them. Paper (2026-11-03, the 2.0.0 plugin): API check
+passes on all 20 versions and bot-test (59 checks) on 19. On 1.20.5 the bot drops on entering the Nether, with or without the plugin (a mineflayer decode error), so its three Nether
 checks fail there.
 
 ## Known quirks

@@ -28,7 +28,6 @@ targets=(
     "forge-47.4.0|forge|1.20.1|47.4.0||25615|oreradar-$v+1.20.1-forge.jar"
     "neoforge-47.1.106|neoforge1201|1.20.1|47.1.106||25616|oreradar-$v+1.20.1-neoforge.jar"
     "neoforge-47.1.79|neoforge1201|1.20.1|47.1.79||25616|oreradar-$v+1.20.1-neoforge.jar"
-    "neoforge-47.1.99|neoforge1201|1.20.1|47.1.99||25616|oreradar-$v+1.20.1-neoforge.jar"
     "fabric1201-0.20.1|fabric|1.20.1|0.20.1|0.92.12+1.20.1|25617|oreradar-$v+1.20.1-fabric.jar"
     "fabric1201-0.15.0|fabric|1.20.1|0.15.0|0.83.0+1.20.1|25617|oreradar-$v+1.20.1-fabric.jar"
     "neoforge-21.1.266|neoforge|1.21.1|21.1.266||25625|oreradar-$v+1.21.1-neoforge.jar"
