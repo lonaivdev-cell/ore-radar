@@ -14,11 +14,16 @@ chunks, and all players' scans share a small time budget per server tick.
 
 | Server | File | Players need |
 |---|---|---|
-| Forge 1.20.1 (47.0+) or NeoForge 1.20.1 | `oreradar-2.0.0+1.20.1-forge.jar` | the same jar |
-| Fabric 1.20.1 | `oreradar-2.0.0+1.20.1-fabric.jar` + Fabric API | the same jar and Fabric API |
-| NeoForge 1.21.1 | `oreradar-2.0.0+1.21.1-neoforge.jar` | the same jar |
-| Fabric 1.21.1 | `oreradar-2.0.0+1.21.1-fabric.jar` + Fabric API | the same jar and Fabric API |
+| Forge 1.20.1 (47.0+) | `oreradar-2.0.1+1.20.1-forge.jar` | the same jar |
+| NeoForge 1.20.1 (47.1) | `oreradar-2.0.1+1.20.1-neoforge.jar` | the same jar |
+| Fabric 1.20.1 | `oreradar-2.0.1+1.20.1-fabric.jar` + Fabric API | the same jar and Fabric API |
+| NeoForge 1.21.1 | `oreradar-2.0.1+1.21.1-neoforge.jar` | the same jar |
+| Fabric 1.21.1 | `oreradar-2.0.1+1.21.1-fabric.jar` + Fabric API | the same jar and Fabric API |
 | Paper 1.20.1 to 26.3 | `oreradar-2.0.0-paper.jar` (a plugin) | nothing: plain vanilla clients |
+
+The file name says both the Minecraft version and the loader: pick the one that matches both. A
+1.20.1 jar does not load on 1.21.1 (NeoForge 21.1 reports it as "for Minecraft Forge or an older
+version of NeoForge").
 
 **Mods: install on the server and on every client.** A player without the mod cannot load the
 chunks that hold a Charging Station (Forge turns them away at login; Fabric and NeoForge let

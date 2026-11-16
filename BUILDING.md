@@ -6,7 +6,7 @@
 
 ```bash
 export JAVA_HOME=/opt/graalvm-21      # Gradle 9.5 and Loom 1.17 run on Java 21 (build.sh's default if it exists)
-./build.sh                            # core tests, all five jars, dist/ + dist/SHA256SUMS
+./build.sh                            # core tests, all six jars, dist/ + dist/SHA256SUMS
 ./build.sh --offline                  # same, once every dependency is cached
 ./build.sh core mc1201 paper          # only these targets (core, mc1201, mc1211, paper)
 ```
@@ -21,11 +21,12 @@ any heavy command you run by hand too.
 
 | Target | Gradle output | `dist/` name |
 |---|---|---|
-| Forge 1.20.1 | `mc1201/forge/build/libs/` | `oreradar-2.0.0+1.20.1-forge.jar` |
-| Fabric 1.20.1 | `mc1201/fabric/build/libs/` | `oreradar-2.0.0+1.20.1-fabric.jar` |
-| NeoForge 1.21.1 | `mc1211/neoforge/build/libs/` | `oreradar-2.0.0+1.21.1-neoforge.jar` |
-| Fabric 1.21.1 | `mc1211/fabric/build/libs/` | `oreradar-2.0.0+1.21.1-fabric.jar` |
-| Paper | `paper/build/libs/` | `oreradar-2.0.0-paper.jar` |
+| Forge 1.20.1 | `mc1201/forge/build/libs/` | `oreradar-2.0.1+1.20.1-forge.jar` |
+| NeoForge 1.20.1 | `mc1201/neoforge/build/libs/` | `oreradar-2.0.1+1.20.1-neoforge.jar` |
+| Fabric 1.20.1 | `mc1201/fabric/build/libs/` | `oreradar-2.0.1+1.20.1-fabric.jar` |
+| NeoForge 1.21.1 | `mc1211/neoforge/build/libs/` | `oreradar-2.0.1+1.21.1-neoforge.jar` |
+| Fabric 1.21.1 | `mc1211/fabric/build/libs/` | `oreradar-2.0.1+1.21.1-fabric.jar` |
+| Paper | `paper/build/libs/` | `oreradar-2.0.0-paper.jar` (the plugin keeps its own version, `paper/gradle.properties`) |
 
 ## Layout: four independent Gradle builds, one wrapper
 
@@ -36,7 +37,9 @@ gradle/conventions.gradle    every module: identity, Java level, metadata expans
 gradle/common.gradle         a common module: adds core's and shared/java's sources, publishes them to loaders
 gradle/loader.gradle         a loader module: compiles common + core into its jar, seeds run dirs
 core/                        pure Java + JUnit (its own build: ./gradlew -p core test)
-mc1201/   common, forge, fabric          (settings.gradle, gradle.properties: 1.20.1 pins)
+mc1201/   common, forge, neoforge, fabric (settings.gradle, gradle.properties: 1.20.1 pins;
+                                         neoforge has only build.gradle and mods.toml: it builds
+                                         forge's sources against NeoForge 47.1)
 mc1211/   common, neoforge, fabric       (settings.gradle, gradle.properties: 1.21.1 pins)
 paper/                                   (settings.gradle, gradle.properties: Paper pins)
 shared/java/                 vanilla code identical on 1.20.1 and 1.21.1 (both commons compile it)
@@ -106,6 +109,7 @@ outside `build/`, so `clean` keeps the worlds.
 | Module | Client | Dedicated server | GameTest server | Server port |
 |---|---|---|---|---|
 | `mc1201/forge` | `runClient` | `runServer`, `runBenchServer` | `runGameTestServer` | 25611 |
+| `mc1201/neoforge` | `runClient` | `runServer`, `runBenchServer` | `runGameTestServer` | 25614 |
 | `mc1201/fabric` | `runClient` | `runServer`, `runBenchServer` | `runGametest` | 25612 |
 | `mc1211/neoforge` | `runClient` | `runServer`, `runBenchServer` | `runGameTestServer` | 25621 |
 | `mc1211/fabric` | `runClient` | `runServer`, `runBenchServer` | `runGametest` | 25622 |
@@ -174,12 +178,13 @@ outside `build/`, so `clean` keeps the worlds.
 | ModDevGradle | 2.0.148 (`net.neoforged.moddev`, `net.neoforged.moddev.legacyforge`) | newest 2.0.x; one plugin for Forge 1.20.1, NeoForge 1.21.1 and both commons. ForgeGradle 6 does not run on Gradle 9 |
 | foojay-resolver-convention | 1.0.0 | lets Gradle download a missing JDK |
 | Mappings | Mojang official everywhere, no Parchment | common code compiles unchanged on both loaders of a version |
-| Forge | 1.20.1-47.4.0 | the version the live DeceasedCraft server runs, so nothing from a later 47.4.x slips in (latest is 47.4.28). `mods.toml` accepts `[47,)`, so NeoForge 47.1 for 1.20.1 also loads it |
+| Forge | 1.20.1-47.4.29 | latest 47.4.x. `mods.toml` accepts `[47,)`; the compatibility matrix checks 47.0.0 and the live DeceasedCraft server's 47.4.0 |
+| NeoForge for 1.20.1 | 1.20.1-47.1.106 (`net.neoforged:forge`) | latest 47.1.x; the neoforge module's `mods.toml` requires `forge` `[47.1,)` (NeoForge 1.20.1 still names itself `forge`) |
 | MCP config (1.20.1 common) | 1.20.1 | vanilla mode of MDG's legacy plugin |
-| NeoForge | 21.1.265 | latest 21.1.x; `neoforge.mods.toml` requires `[21.1.0,)` |
+| NeoForge | 21.1.266 | latest 21.1.x; `neoforge.mods.toml` requires `[21.1.0,)` |
 | NeoForm (1.21.1 common) | 1.21.1-20240808.144430 | the 1.21.1 release NeoForm |
 | Fabric Loader | 0.20.1 (dev); jars accept `>=0.15` | latest stable; DESIGN.md §1 sets the floor |
-| Fabric API | 0.92.12+1.20.1, 0.116.17+1.21.1 | latest for each version |
+| Fabric API | 0.92.12+1.20.1, 0.116.18+1.21.1 | latest for each version |
 | Team Reborn Energy | 3.0.0 (1.20.1), 4.1.0 (1.21.1), jar-in-jar | 3.0.0 needs MC ≥1.19.4 and Java 17; 4.1.0 is the last for 1.21–1.21.4 (4.2.0 needs 1.21.5, 5.0.0 needs 26.1) |
 | Paper API | 1.20.1-R0.1-20230921.165944-178 | the final build of `1.20.1-R0.1-SNAPSHOT`, pinned so a cached build never asks the network whether the snapshot moved |
 
@@ -196,10 +201,11 @@ must still override one.
 
 | Jar | Targets |
 |---|---|
-| 1.20.1 Forge | Forge 47.0.0, 47.4.0 (build), 47.4.28; NeoForge 47.1.106 for 1.20.1 |
+| 1.20.1 Forge | Forge 47.0.0, 47.4.0 (the live server), 47.4.29 (build) |
+| 1.20.1 NeoForge | NeoForge 47.1.79, 47.1.106 (build) |
 | 1.20.1 Fabric | Loader 0.15.0 + Fabric API 0.83.0 (the oldest); Loader 0.20.1 + Fabric API 0.92.12 |
-| 1.21.1 NeoForge | NeoForge 21.1.1 (the oldest), 21.1.265 (build) |
-| 1.21.1 Fabric | Loader 0.15.11 + Fabric API 0.102.0 (the oldest pair); Loader 0.20.1 + Fabric API 0.116.17 |
+| 1.21.1 NeoForge | NeoForge 21.1.1 (the oldest), 21.1.266 (build) |
+| 1.21.1 Fabric | Loader 0.15.11 + Fabric API 0.102.0 (the oldest pair); Loader 0.20.1 + Fabric API 0.116.18 |
 
 `tools/test-paper/compat.sh <versions...>` does the same for the plugin on each Paper version: it
 downloads Paper (sha256-checked), then runs the API check and `bot-test.js` (`OR_TESTS` selects the
@@ -209,9 +215,11 @@ same protocol under another name (1.20.5 as 1.20.6, 1.21 as 1.21.1, 1.21.7 as 1.
 1.21.3 joins as 1.21.4 through ViaVersion (mineflayer misreads 1.21.3 items), and the harness also
 sends the old sneak packet on 1.21.3 to 1.21.5, as a real client of those versions does.
 
-Results (2026-11-03, the 2.0.0 release jars): all ten loader targets pass boot and linkage. Paper:
-API check passes on all 20 versions and bot-test (59 checks) on 19. On 1.20.5 the bot drops on
-entering the Nether, with or without the plugin (a mineflayer decode error), so its three Nether
+Results (2026-11-16, the 2.0.1 mod jars): all eleven loader targets pass boot and linkage. Older
+NeoForge 1.20.1 servers (47.1.5, 47.1.28, 47.1.54) crash in NeoForge's own bootstrap launcher
+("Duplicate key ... loader-47.1.x.jar") even with no mods, so 47.1.79 is the oldest that boots;
+the jar's linkage check passes on all of them. Paper (2026-11-03, the 2.0.0 plugin): API check
+passes on all 20 versions and bot-test (59 checks) on 19. On 1.20.5 the bot drops on entering the Nether, with or without the plugin (a mineflayer decode error), so its three Nether
 checks fail there.
 
 ## Known quirks

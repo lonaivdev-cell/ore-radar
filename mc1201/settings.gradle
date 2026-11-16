@@ -1,4 +1,4 @@
-// Ore Radar for Minecraft 1.20.1: common (vanilla), forge, fabric. Run from the repository root
+// Ore Radar for Minecraft 1.20.1: common (vanilla), forge, neoforge (NeoForge 47.1), fabric. Run from the repository root
 // with the shared wrapper: ./gradlew -p mc1201 <tasks>. BUILDING.md explains the layout.
 pluginManagement {
     // Plugin versions are shared with mc1211/ through ../gradle.properties.
@@ -23,4 +23,4 @@ plugins {
 }
 
 rootProject.name = 'mc1201'
-include 'common', 'forge', 'fabric'
+include 'common', 'forge', 'neoforge', 'fabric'
