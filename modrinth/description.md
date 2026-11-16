@@ -12,11 +12,15 @@ chunks, and all players' scans share one small time budget per server tick (2 ms
 
 | Server | File | Players need |
 |---|---|---|
-| Forge or NeoForge 1.20.1 | `2.0.0+1.20.1-forge` | the same file |
-| Fabric 1.20.1 | `2.0.0+1.20.1-fabric` + Fabric API | the same file and Fabric API |
-| NeoForge 1.21.1 | `2.0.0+1.21.1-neoforge` | the same file |
-| Fabric 1.21.1 | `2.0.0+1.21.1-fabric` + Fabric API | the same file and Fabric API |
+| Forge 1.20.1 | `2.0.1+1.20.1-forge` | the same file |
+| NeoForge 1.20.1 | `2.0.1+1.20.1-neoforge` | the same file |
+| Fabric 1.20.1 | `2.0.1+1.20.1-fabric` + Fabric API | the same file and Fabric API |
+| NeoForge 1.21.1 | `2.0.1+1.21.1-neoforge` | the same file |
+| Fabric 1.21.1 | `2.0.1+1.21.1-fabric` + Fabric API | the same file and Fabric API |
 | Paper 1.20.1 to 26.3 | `2.0.0+paper` (a plugin) | nothing: plain vanilla clients |
+
+Pick the file whose name matches both your Minecraft version and your loader: a 1.20.1 file does
+not load on 1.21.1.
 
 **The mods go on the server and on every client.** A player without the mod cannot load the
 chunks that hold a Charging Station. For players without mods, use the Paper plugin. In

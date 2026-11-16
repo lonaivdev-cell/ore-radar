@@ -1,4 +1,4 @@
-# Publishing Ore Radar 2.0.0 on Modrinth
+# Publishing Ore Radar on Modrinth (2.0.0; 2.0.1 at the end)
 
 Everything here is done by hand on modrinth.com while logged in to your own account. Nothing in
 this folder uploads anything, and no token is needed.
@@ -75,3 +75,25 @@ Check that Modrinth shows the uploaded file's name exactly as in `dist/` before 
 
 Open the project page, read it once as a player would, then press **Submit for review**. After
 approval, `https://modrinth.com/mod/ore-radar` (the homepage written into the jars) goes live.
+
+## 2.0.1: re-upload the mods (Modrinth and CurseForge)
+
+2.0.1 changes only the mods; the Paper plugin stays 2.0.0, so do not re-upload it.
+
+1. `./build.sh` and `(cd dist && sha256sum -c SHA256SUMS)`. `dist/` then holds five 2.0.1 mod jars
+   and `oreradar-2.0.0-paper.jar`.
+2. **Modrinth:** create one version per 2.0.1 entry in `versions.json`, as in step 5.
+3. **CurseForge:** upload the same five jars as new files. Tick **exactly one loader** per file,
+   and only its Minecraft version:
+
+   | File | Loader | Game version |
+   |---|---|---|
+   | `oreradar-2.0.1+1.20.1-forge.jar` | Forge | 1.20.1 |
+   | `oreradar-2.0.1+1.20.1-neoforge.jar` | NeoForge | 1.20.1 |
+   | `oreradar-2.0.1+1.20.1-fabric.jar` | Fabric | 1.20.1 (relation: Fabric API, required) |
+   | `oreradar-2.0.1+1.21.1-neoforge.jar` | NeoForge | 1.21.1 |
+   | `oreradar-2.0.1+1.21.1-fabric.jar` | Fabric | 1.21.1 (relation: Fabric API, required) |
+
+   CurseForge shows `+` as `-` in file names; that is expected.
+4. On both sites, take the **NeoForge** tag off the 2.0.0 Forge 1.20.1 file (or archive that
+   file), so the launchers stop offering a Forge jar to NeoForge instances.

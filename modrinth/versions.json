@@ -1,10 +1,25 @@
 [
   {
-    "name": "Ore Radar 2.0.0 (Forge and NeoForge 1.20.1)",
-    "version_number": "2.0.0+1.20.1-forge",
+    "name": "Ore Radar 2.0.1 (Forge 1.20.1)",
+    "version_number": "2.0.1+1.20.1-forge",
     "version_type": "release",
     "loaders": [
-      "forge",
+      "forge"
+    ],
+    "game_versions": [
+      "1.20.1"
+    ],
+    "environment": "client_and_server",
+    "dependencies": [],
+    "changelog": "Ore Radar 2.0.1: a file of its own for NeoForge 1.20.1 (the Forge 1.20.1 file is now listed for Forge only), and built against the newest loaders (Forge 47.4.29, NeoForge 21.1.266, Fabric API 0.116.18 for 1.21.1). No gameplay changes.",
+    "featured": true,
+    "file": "../dist/oreradar-2.0.1+1.20.1-forge.jar"
+  },
+  {
+    "name": "Ore Radar 2.0.1 (NeoForge 1.20.1)",
+    "version_number": "2.0.1+1.20.1-neoforge",
+    "version_type": "release",
+    "loaders": [
       "neoforge"
     ],
     "game_versions": [
@@ -12,13 +27,13 @@
     ],
     "environment": "client_and_server",
     "dependencies": [],
-    "changelog": "First public release: Forge 1.20.1 (also runs on NeoForge 1.20.1), Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "Ore Radar 2.0.1: a file of its own for NeoForge 1.20.1 (the Forge 1.20.1 file is now listed for Forge only), and built against the newest loaders (Forge 47.4.29, NeoForge 21.1.266, Fabric API 0.116.18 for 1.21.1). No gameplay changes.",
     "featured": true,
-    "file": "../dist/oreradar-2.0.0+1.20.1-forge.jar"
+    "file": "../dist/oreradar-2.0.1+1.20.1-neoforge.jar"
   },
   {
-    "name": "Ore Radar 2.0.0 (Fabric 1.20.1)",
-    "version_number": "2.0.0+1.20.1-fabric",
+    "name": "Ore Radar 2.0.1 (Fabric 1.20.1)",
+    "version_number": "2.0.1+1.20.1-fabric",
     "version_type": "release",
     "loaders": [
       "fabric"
@@ -33,13 +48,13 @@
         "dependency_type": "required"
       }
     ],
-    "changelog": "First public release: Forge 1.20.1 (also runs on NeoForge 1.20.1), Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "Ore Radar 2.0.1: a file of its own for NeoForge 1.20.1 (the Forge 1.20.1 file is now listed for Forge only), and built against the newest loaders (Forge 47.4.29, NeoForge 21.1.266, Fabric API 0.116.18 for 1.21.1). No gameplay changes.",
     "featured": true,
-    "file": "../dist/oreradar-2.0.0+1.20.1-fabric.jar"
+    "file": "../dist/oreradar-2.0.1+1.20.1-fabric.jar"
   },
   {
-    "name": "Ore Radar 2.0.0 (NeoForge 1.21.1)",
-    "version_number": "2.0.0+1.21.1-neoforge",
+    "name": "Ore Radar 2.0.1 (NeoForge 1.21.1)",
+    "version_number": "2.0.1+1.21.1-neoforge",
     "version_type": "release",
     "loaders": [
       "neoforge"
@@ -49,13 +64,13 @@
     ],
     "environment": "client_and_server",
     "dependencies": [],
-    "changelog": "First public release: Forge 1.20.1 (also runs on NeoForge 1.20.1), Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "Ore Radar 2.0.1: a file of its own for NeoForge 1.20.1 (the Forge 1.20.1 file is now listed for Forge only), and built against the newest loaders (Forge 47.4.29, NeoForge 21.1.266, Fabric API 0.116.18 for 1.21.1). No gameplay changes.",
     "featured": true,
-    "file": "../dist/oreradar-2.0.0+1.21.1-neoforge.jar"
+    "file": "../dist/oreradar-2.0.1+1.21.1-neoforge.jar"
   },
   {
-    "name": "Ore Radar 2.0.0 (Fabric 1.21.1)",
-    "version_number": "2.0.0+1.21.1-fabric",
+    "name": "Ore Radar 2.0.1 (Fabric 1.21.1)",
+    "version_number": "2.0.1+1.21.1-fabric",
     "version_type": "release",
     "loaders": [
       "fabric"
@@ -70,9 +85,9 @@
         "dependency_type": "required"
       }
     ],
-    "changelog": "First public release: Forge 1.20.1 (also runs on NeoForge 1.20.1), Fabric 1.20.1, NeoForge 1.21.1, Fabric 1.21.1 and a Paper plugin for vanilla clients (1.20.1 to 26.3, tested on every version listed). Radars made with Ore Radar 1.0 keep working.",
+    "changelog": "Ore Radar 2.0.1: a file of its own for NeoForge 1.20.1 (the Forge 1.20.1 file is now listed for Forge only), and built against the newest loaders (Forge 47.4.29, NeoForge 21.1.266, Fabric API 0.116.18 for 1.21.1). No gameplay changes.",
     "featured": true,
-    "file": "../dist/oreradar-2.0.0+1.21.1-fabric.jar"
+    "file": "../dist/oreradar-2.0.1+1.21.1-fabric.jar"
   },
   {
     "name": "Ore Radar 2.0.0 (Paper)",

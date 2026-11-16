@@ -16,13 +16,16 @@ Use its code as reference; don't edit it.
 
 | Module | Minecraft | Loader / API | Java | Jar |
 |---|---|---|---|---|
-| `mc1201/forge` | 1.20.1 | Forge 47.4.x (also loads on NeoForge 47.1 for 1.20.1) | 17 | `oreradar-2.0.0+1.20.1-forge.jar` |
-| `mc1201/fabric` | 1.20.1 | Fabric Loader ≥0.15, Fabric API | 17 | `oreradar-2.0.0+1.20.1-fabric.jar` |
-| `mc1211/neoforge` | 1.21.1 | NeoForge 21.1.x | 21 | `oreradar-2.0.0+1.21.1-neoforge.jar` |
-| `mc1211/fabric` | 1.21.1 | Fabric Loader ≥0.15, Fabric API | 21 | `oreradar-2.0.0+1.21.1-fabric.jar` |
+| `mc1201/forge` | 1.20.1 | Forge 47.x | 17 | `oreradar-2.0.1+1.20.1-forge.jar` |
+| `mc1201/neoforge` | 1.20.1 | NeoForge 47.1.x (the forge module's sources, built against NeoForge) | 17 | `oreradar-2.0.1+1.20.1-neoforge.jar` |
+| `mc1201/fabric` | 1.20.1 | Fabric Loader ≥0.15, Fabric API | 17 | `oreradar-2.0.1+1.20.1-fabric.jar` |
+| `mc1211/neoforge` | 1.21.1 | NeoForge 21.1.x | 21 | `oreradar-2.0.1+1.21.1-neoforge.jar` |
+| `mc1211/fabric` | 1.21.1 | Fabric Loader ≥0.15, Fabric API | 21 | `oreradar-2.0.1+1.21.1-fabric.jar` |
 | `paper` | 1.20.1 → latest (26.x) | Paper API, compiled against 1.20.1 | 17 | `oreradar-2.0.0-paper.jar` |
 
-- Mod id `oreradar`, display name **Ore Radar**, version `2.0.0`, license MIT. Base package
+- Mod id `oreradar`, display name **Ore Radar**, version `2.0.1` (the Paper plugin: `2.0.0`),
+  license MIT. Every loader gets a jar named for it, so a store lists each file under exactly one
+  loader. Base package
   `net.loserver.oreradar`; the pure-Java core is `net.loserver.oreradar.core`.
 - Modrinth slug `ore-radar` was free on 2026-10-30. The jars accept exactly their Minecraft version
   (Fabric: `"minecraft": "1.20.1"`, not `~`, which would also accept 1.20.2+).
@@ -48,7 +51,8 @@ Use its code as reference; don't edit it.
   modrinth/        the Modrinth page, icon, gallery and version list; PUBLISHING.md (manual steps)
   core/            pure Java 17, no Minecraft, no dependencies; JUnit 5 tests
   mc1201/common/   vanilla 1.20.1 code shared by forge and fabric (+ core sources)
-  mc1201/forge/    mc1201/fabric/
+  mc1201/forge/    mc1201/neoforge/ (forge's sources, built against NeoForge 47.1)
+  mc1201/fabric/
   mc1211/common/   vanilla 1.21.1 code shared by neoforge and fabric (+ core sources)
   mc1211/neoforge/ mc1211/fabric/
   shared/          code and assets identical on every MC version, added to both commons
@@ -658,7 +662,7 @@ between ticks soak up added work.
 ## 12. Testing (each module proves itself before it is called done)
 
 - Dev servers bind 127.0.0.1 on their vertical's ports: 1.20.1 uses 25611 (Forge), 25612
-  (Fabric) and 25613 (a vanilla server, for "no Ore Radar" tests); 1.21.1 uses 25621 (NeoForge)
+  (Fabric), 25613 (a vanilla server, for "no Ore Radar" tests) and 25614 (NeoForge); 1.21.1 uses 25621 (NeoForge)
   and 25622 (Fabric); Paper uses 25631–25633 (`tools/test-paper/server.sh`). The DeceasedCraft
   compat rig uses display `:77` and 127.0.0.1:25601.
 - **Never touch `/opt/minecraft`** or the live ports: 25565, 25566, 25575, UDP 24454. Each test

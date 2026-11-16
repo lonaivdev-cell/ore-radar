@@ -21,14 +21,17 @@ cd "$repo"
 prop() { sed -n "s/^$2=//p" "$1" | tail -n 1; }
 mod_id=$(prop gradle.properties mod_id)
 version=$(prop gradle.properties mod_version)
+# The plugin may pin its own version (paper/gradle.properties); the mods use the shared one.
+paper_version=$(prop paper/gradle.properties mod_version)
+paper_version=${paper_version:-$version}
 mc1201=$(prop mc1201/gradle.properties minecraft_version)
 mc1211=$(prop mc1211/gradle.properties minecraft_version)
 
 # The release jars of each target that makes any.
 declare -A jars=(
-    [mc1201]="mc1201/forge/build/libs/$mod_id-$version+$mc1201-forge.jar mc1201/fabric/build/libs/$mod_id-$version+$mc1201-fabric.jar"
+    [mc1201]="mc1201/forge/build/libs/$mod_id-$version+$mc1201-forge.jar mc1201/neoforge/build/libs/$mod_id-$version+$mc1201-neoforge.jar mc1201/fabric/build/libs/$mod_id-$version+$mc1201-fabric.jar"
     [mc1211]="mc1211/neoforge/build/libs/$mod_id-$version+$mc1211-neoforge.jar mc1211/fabric/build/libs/$mod_id-$version+$mc1211-fabric.jar"
-    [paper]="paper/build/libs/$mod_id-$version-paper.jar"
+    [paper]="paper/build/libs/$mod_id-$paper_version-paper.jar"
 )
 
 targets=()

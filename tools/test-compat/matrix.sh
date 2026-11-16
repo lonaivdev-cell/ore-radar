@@ -13,26 +13,30 @@ set -uo pipefail
 repo=$(cd "$(dirname "$0")/../.." && pwd)
 out=$repo/runs/compat
 mkdir -p "$out"
-j17=$HOME/.gradle/jdks/eclipse_adoptium-17-amd64-linux.2/bin/java
-j21=/opt/graalvm-21/bin/java
+# The Java 17 Gradle provisioned for the 1.20.1 builds, and a Java 21; J17 / J21 override them.
+j17=${J17:-$(ls -d "$HOME"/.gradle/jdks/*adoptium-17*/bin/java 2>/dev/null | tail -n 1)}
+j21=${J21:-/opt/graalvm-21/bin/java}
+[[ -x $j21 ]] || j21=$(command -v java)
 fabric_installer=1.1.2
+v=$(sed -n 's/^mod_version=//p' "$repo/gradle.properties")
 
 # id | kind | Minecraft | loader version | Fabric API | port | jar
 # Each kind's baseline (below) comes first, so the targets after it can be compared with it.
 targets=(
-    "forge-47.4.0|forge|1.20.1|47.4.0||25615|oreradar-2.0.0+1.20.1-forge.jar"
-    "forge-47.0.0|forge|1.20.1|47.0.0||25615|oreradar-2.0.0+1.20.1-forge.jar"
-    "forge-47.4.28|forge|1.20.1|47.4.28||25615|oreradar-2.0.0+1.20.1-forge.jar"
-    "neoforge-47.1.106|neoforge1201|1.20.1|47.1.106||25616|oreradar-2.0.0+1.20.1-forge.jar"
-    "fabric1201-0.20.1|fabric|1.20.1|0.20.1|0.92.12+1.20.1|25617|oreradar-2.0.0+1.20.1-fabric.jar"
-    "fabric1201-0.15.0|fabric|1.20.1|0.15.0|0.83.0+1.20.1|25617|oreradar-2.0.0+1.20.1-fabric.jar"
-    "neoforge-21.1.265|neoforge|1.21.1|21.1.265||25625|oreradar-2.0.0+1.21.1-neoforge.jar"
-    "neoforge-21.1.1|neoforge|1.21.1|21.1.1||25625|oreradar-2.0.0+1.21.1-neoforge.jar"
-    "fabric1211-0.20.1|fabric|1.21.1|0.20.1|0.116.17+1.21.1|25627|oreradar-2.0.0+1.21.1-fabric.jar"
-    "fabric1211-oldest|fabric|1.21.1|auto|0.102.0+1.21.1|25627|oreradar-2.0.0+1.21.1-fabric.jar"
+    "forge-47.4.29|forge|1.20.1|47.4.29||25615|oreradar-$v+1.20.1-forge.jar"
+    "forge-47.0.0|forge|1.20.1|47.0.0||25615|oreradar-$v+1.20.1-forge.jar"
+    "forge-47.4.0|forge|1.20.1|47.4.0||25615|oreradar-$v+1.20.1-forge.jar"
+    "neoforge-47.1.106|neoforge1201|1.20.1|47.1.106||25616|oreradar-$v+1.20.1-neoforge.jar"
+    "neoforge-47.1.5|neoforge1201|1.20.1|47.1.5||25616|oreradar-$v+1.20.1-neoforge.jar"
+    "fabric1201-0.20.1|fabric|1.20.1|0.20.1|0.92.12+1.20.1|25617|oreradar-$v+1.20.1-fabric.jar"
+    "fabric1201-0.15.0|fabric|1.20.1|0.15.0|0.83.0+1.20.1|25617|oreradar-$v+1.20.1-fabric.jar"
+    "neoforge-21.1.266|neoforge|1.21.1|21.1.266||25625|oreradar-$v+1.21.1-neoforge.jar"
+    "neoforge-21.1.1|neoforge|1.21.1|21.1.1||25625|oreradar-$v+1.21.1-neoforge.jar"
+    "fabric1211-0.20.1|fabric|1.21.1|0.20.1|0.116.18+1.21.1|25627|oreradar-$v+1.21.1-fabric.jar"
+    "fabric1211-oldest|fabric|1.21.1|auto|0.102.0+1.21.1|25627|oreradar-$v+1.21.1-fabric.jar"
 )
 # The build version each kind is compared against (linkcheck --baseline).
-declare -A baseline=([forge]=forge-47.4.0 [neoforge1201]=forge-47.4.0 [neoforge]=neoforge-21.1.265)
+declare -A baseline=([forge]=forge-47.4.29 [neoforge1201]=neoforge-47.1.106 [neoforge]=neoforge-21.1.266)
 baseline[fabric1.20.1]=fabric1201-0.20.1
 baseline[fabric1.21.1]=fabric1211-0.20.1
 declare -A api=([forge]=net/minecraftforge/ [neoforge1201]=net/minecraftforge/ [neoforge]=net/neoforged/ [fabric]=net/fabricmc/)

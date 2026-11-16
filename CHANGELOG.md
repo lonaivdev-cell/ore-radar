@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.1
+
+- **A file of its own for NeoForge 1.20.1:** `oreradar-2.0.1+1.20.1-neoforge.jar`, built against
+  NeoForge 47.1.106. The Forge 1.20.1 jar is now listed for Forge only, so NeoForge players no
+  longer pick a Forge jar by mistake (on NeoForge 1.21.1 that jar refuses to load).
+- **Built against the newest loaders:** Forge 47.4.29, NeoForge 21.1.266, Fabric API
+  0.116.18+1.21.1 (Fabric Loader 0.20.1 and Fabric API 0.92.12+1.20.1 were already the newest).
+  The accepted loader versions are unchanged.
+- No gameplay changes. The Paper plugin is unchanged and stays 2.0.0.
+
 ## 2.0.0
 
 The first public release. Ore Radar 1.0 was a Forge 1.20.1 mod for one server; 2.0 is a rewrite.
